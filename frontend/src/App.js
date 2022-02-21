@@ -1,7 +1,7 @@
 import { createContext, useState } from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import { Grid, makeStyles } from "@material-ui/core";
-
+import MessagePopup from "./lib/MessagePopup";
 import Navbar from "./component/Navbar";
 import Login from "./component/Login";
 import Signup from "./component/Signup";
@@ -47,7 +47,17 @@ function App() {
               </Switch>
           </Grid>
         </Grid>
-      
+        <MessagePopup
+          open={popup.open}
+          setOpen={(status) =>
+            setPopup({
+              ...popup,
+              open: status,
+            })
+          }
+          severity={popup.severity}
+          message={popup.message}
+        />
       </SetPopupContext.Provider>
     </BrowserRouter>
   );
