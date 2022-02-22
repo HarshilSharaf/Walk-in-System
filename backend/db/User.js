@@ -36,7 +36,8 @@ const User = sequelize.define('users',
       type: Sequelize.TIME,
       defaultValue: Sequelize.NOW,
       allowNull: false
-    }
+    },
+   
   }, {
     hooks: {
       beforeCreate: async (user) => {
@@ -49,5 +50,6 @@ const User = sequelize.define('users',
   timestamps: false
 }
 )
+User.sync().then(()=>console.log('Table Users Created'))
 
 module.exports= User 
