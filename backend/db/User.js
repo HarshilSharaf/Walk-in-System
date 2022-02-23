@@ -1,55 +1,47 @@
 const bcrypt = require("bcrypt");
-const Sequelize = require("sequelize")
+const Sequelize = require("sequelize");
+const sequelize = require("./Connection");
 
-const sequelize = new Sequelize("jobportal", "postgres", "harshil", {
-  host: "localhost",
-  port: 5432,
-  dialect: 'postgres',
-  logging: false,
-
-
-})
-
-const User = sequelize.define('users',
+const User = sequelize.define(
+  "users",
   {
-
     uid: {
       type: Sequelize.UUID,
-      defaultValue:Sequelize.UUIDV4,
+      defaultValue: Sequelize.UUIDV4,
       allowNull: false,
-      primaryKey: true
+      primaryKey: true,
     },
     email: {
       type: Sequelize.STRING,
       allowNull: false,
-      unique: true
+      unique: true,
     },
     password: {
       type: Sequelize.TEXT,
-      allowNull: false
+      allowNull: false,
     },
     type: {
       type: Sequelize.ENUM("recruiter", "applicant"),
-      allowNull: false
+      allowNull: false,
     },
     created_on: {
       type: Sequelize.TIME,
       defaultValue: Sequelize.NOW,
-      allowNull: false
+      allowNull: false,
     },
-   
-  }, {
+  },
+  {
     hooks: {
       beforeCreate: async (user) => {
         if (user.password) {
-          const salt = await bcrypt.genSaltSync(10, 'a');
+          const salt = await bcrypt.genSaltSync(10, "a");
           user.password = bcrypt.hashSync(user.password, salt);
-         }
-      
-      }},
-  timestamps: false
-}
-)
-User.sync().then(()=>console.log('Table Users Created'))
+        }
+      },
+    },
+    timestamps: false,
+  }
+);
+User.sync().then(() => console.log("Table Users Created"));
 
-module.exports= User 
+module.exports = User;
