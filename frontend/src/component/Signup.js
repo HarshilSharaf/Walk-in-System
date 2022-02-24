@@ -198,24 +198,23 @@ const Login = (props) => {
       }
     });
 
-    
     education
-    .filter((obj) => obj.institutionName.trim() !== "")
-    .map((obj) => {
-      if (obj["endYear"] === "") {
-        delete obj["endYear"];
-      }
-      return obj;
-    })
+      .filter((obj) => obj.institutionName.trim() !== "")
+      .map((obj) => {
+        if (obj["endYear"] === "") {
+          delete obj["endYear"];
+        }
+        return obj;
+      });
     for (var i = 0; i < education.length; i++) {
-      education[i].startYear = +education[i].startYear
-      education[i].endYear = +education[i].endYear
+      education[i].startYear = +education[i].startYear;
+      education[i].endYear = +education[i].endYear;
     }
- 
+
     console.log(education);
     let updatedDetails = {
       ...signupDetails,
-      education:education,
+      education: education,
     };
 
     setSignupDetails(updatedDetails);
