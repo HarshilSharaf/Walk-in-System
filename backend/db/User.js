@@ -25,7 +25,7 @@ const User = sequelize.define(
       allowNull: false,
     },
     created_on: {
-      type: Sequelize.TIME,
+      type: Sequelize.DATE,
       defaultValue: Sequelize.NOW,
       allowNull: false,
     },
