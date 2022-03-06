@@ -12,7 +12,7 @@ const JobApplicant = sequelize.define(
     },
     name: {
       type: Sequelize.STRING,
-      allowNuzll: false,
+      allowNull: false,
     },
     skills: {
       type: Sequelize.ARRAY(Sequelize.TEXT),

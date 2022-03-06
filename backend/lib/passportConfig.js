@@ -88,7 +88,7 @@ passport.use(
       secretOrKey: authKeys.jwtSecretKey,
     },
     (jwt_payload, done) => {
-      User.findOne(jwt_payload._id)
+      User.findByPk(jwt_payload._id)
         .then((user) => {
           console.log(Object.keys(jwt_payload));
           if (!user) {
@@ -97,7 +97,7 @@ passport.use(
             });
           }
           console.log(user)
-          user["_doc"] = filterJson(user["_doc"], ["password", "__v"]);
+          // user["_id"] = filterJson(user["_doc"], ["password", "__v"]);
           return done(null, user);
         })
         .catch((err) => {

@@ -4,8 +4,10 @@ import { Grid, makeStyles } from "@material-ui/core";
 import MessagePopup from "./lib/MessagePopup";
 import Navbar from "./component/Navbar";
 import Login from "./component/Login";
+import Logout from "./component/Logout";
 import Signup from "./component/Signup";
-
+import isAuth, { userType } from "./lib/isAuth";
+import CreateJobs from "../src/component/recruiter/CreateJobs"
 const useStyles = makeStyles((theme) => ({
   body: {
     display: "flex",
@@ -33,7 +35,7 @@ function App() {
       <SetPopupContext.Provider value={setPopup}>
         <Grid container direction="column">
           <Grid item xs>
-            <Navbar />
+            <Navbar id="navbar"/>
           </Grid>
           <Grid item className={classes.body}>
             <Switch>
@@ -43,6 +45,19 @@ function App() {
 
               <Route exact path="/signup">
                 <Signup />
+              </Route>
+              <Route exact path="/logout">
+                <Logout />
+              </Route>
+              {/* <Route exact path="/profile">
+                {userType() === "recruiter" ? (
+                  <RecruiterProfile />
+                ) : (
+                  <Profile />
+                )}
+              </Route> */}
+              <Route exact path="/addjob">
+                <CreateJobs />
               </Route>
               </Switch>
           </Grid>
