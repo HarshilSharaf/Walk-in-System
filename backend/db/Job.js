@@ -124,6 +124,14 @@ const Job = sequelize.define("jobs",
                }
             },
         },
+        rid:{
+            type:Sequelize.UUID,
+            allowNull:false,
+            references:{
+                model:'recruiters',
+                key:'rid'
+            }
+        }
     }
 ,{
     timestamps: false,

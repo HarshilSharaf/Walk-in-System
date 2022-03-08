@@ -8,6 +8,7 @@ import Logout from "./component/Logout";
 import Signup from "./component/Signup";
 import isAuth, { userType } from "./lib/isAuth";
 import CreateJobs from "../src/component/recruiter/CreateJobs"
+import MyJobs from "./component/recruiter/MyJobs";
 const useStyles = makeStyles((theme) => ({
   body: {
     display: "flex",
@@ -58,6 +59,9 @@ function App() {
               </Route> */}
               <Route exact path="/addjob">
                 <CreateJobs />
+              </Route>
+              <Route exact path="/myjobs">
+                <MyJobs />
               </Route>
               </Switch>
           </Grid>

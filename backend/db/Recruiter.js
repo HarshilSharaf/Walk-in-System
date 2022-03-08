@@ -1,5 +1,6 @@
 const Sequelize = require("sequelize");
 const sequelize = require("./Connection");
+const Job = require("./Job");
 const Recruiter = sequelize.define(
   "recruiter",
   {
