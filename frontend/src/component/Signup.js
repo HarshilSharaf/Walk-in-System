@@ -28,9 +28,12 @@ import isAuth from "../lib/isAuth";
 const useStyles = makeStyles((theme) => ({
   body: {
     padding: "60px 60px",
+    margin: "10px 0px",
+    fontFamily: "Roboto",
+    boxShadow: "0px 0px 1px",
   },
   inputBox: {
-    width: "400px",
+    width: "600px",
   },
   submitButton: {
     width: "400px",
@@ -332,7 +335,7 @@ const Login = (props) => {
       <Grid container direction="column" spacing={4} alignItems="center">
         <Grid item>
           <Typography variant="h3" component="h2">
-            Signup
+            Sign-up
           </Typography>
         </Grid>
         <Grid item>

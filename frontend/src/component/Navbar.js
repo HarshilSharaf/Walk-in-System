@@ -5,6 +5,7 @@ import {
   Button,
   makeStyles,
 } from "@material-ui/core";
+import * as colors from "@material-ui/core/colors";
 import { useHistory } from "react-router-dom";
 
 import isAuth, { userType } from "../lib/isAuth";
@@ -18,6 +19,24 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     flexGrow: 1,
+    fontWeight: "bold",
+    fontSize: 24,
+  },
+  Toolbar: {
+    boxShadow: "0px 0px",
+    backgroundColor: colors.cyan[50],
+    color: colors.blueGrey[700],
+  },
+  button: {
+    fontFamily: "Montserrat",
+    fontSize: 14,
+    fontWeightLight: 300,
+    fontWeightRegular: 400,
+    fontWeightMedium: 500,
+  },
+  noBox: {
+    boxShadow: "0px 0px",
+    backgroundColor: "#fff",
   },
 }));
 
@@ -31,15 +50,19 @@ const Navbar = (props) => {
   };
 
   return (
-    <AppBar position="fixed">
-      <Toolbar>
+    <AppBar position="fixed" className={classes.noBox}>
+      <Toolbar className={classes.Toolbar}>
         <Typography variant="h6" className={classes.title}>
           Job Portal
         </Typography>
         {isAuth() ? (
           userType() === "recruiter" ? (
             <>
-              <Button color="inherit" onClick={() => handleClick("/home")}>
+              <Button
+                color="inherit"
+                onClick={() => handleClick("/home")}
+                className={classes.button}
+              >
                 Home
               </Button>
               <Button color="inherit" onClick={() => handleClick("/addjob")}>
@@ -79,10 +102,18 @@ const Navbar = (props) => {
           )
         ) : (
           <>
-            <Button color="inherit" onClick={() => handleClick("/login")}>
+            <Button
+              color="inherit"
+              onClick={() => handleClick("/login")}
+              className={classes.button}
+            >
               Login
             </Button>
-            <Button color="inherit" onClick={() => handleClick("/signup")}>
+            <Button
+              color="inherit"
+              onClick={() => handleClick("/signup")}
+              className={classes.button}
+            >
               Signup
             </Button>
           </>
