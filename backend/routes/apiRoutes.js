@@ -5,7 +5,9 @@ const router = express.Router();
 const uuid = require('uuid');
 const JOB = require('../db/Job')
 const jwtAuth = require("../lib/jwtAuth");
-
+const Recruiter =require('../db/Recruiter')
+const JobApplicant = require('../db/JobApplicant')
+const User = require("../db/User")
 
 
 router.post("/jobs", jwtAuth, (req, res) => {
@@ -170,4 +172,143 @@ router.get("/jobs", jwtAuth, (req, res) => {
       res.status(400).json(err);
     });
 });
+
+
+// get user's personal details
+router.get("/user", jwtAuth, (req, res) => {
+  const user = req.user;
+  if (user.type === "recruiter") {
+    Recruiter.findByPk(user.uid )
+      .then((recruiter) => {
+        if (recruiter == null) {
+          res.status(404).json({
+            message: "User does not exist",
+          });
+          return;
+        }
+        res.json(recruiter);
+      })
+      .catch((err) => {
+        res.status(400).json(err);
+      });
+  } else {
+    JobApplicant.findByPk(user.uid )
+      .then((jobApplicant) => {
+        if (jobApplicant == null) {
+          res.status(404).json({
+            message: "User does not exist",
+          });
+          return;
+        }
+        res.json(jobApplicant);
+      })
+      .catch((err) => {
+        res.status(400).json(err);
+      });
+  }
+});
+
+// get user details from id
+router.get("/user/:id", jwtAuth, (req, res) => {
+  User.findByPk(req.params.id)
+    .then((userData) => {
+      if (userData === null) {
+        res.status(404).json({
+          message: "User does not exist",
+        });
+        return;
+      }
+
+      if (userData.type === "recruiter") {
+        Recruiter.findByPk(userData.uid)
+          .then((recruiter) => {
+            if (recruiter === null) {
+              res.status(404).json({
+                message: "User does not exist",
+              });
+              return;
+            }
+            res.json(recruiter);
+          })
+          .catch((err) => {
+            res.status(400).json(err);
+          });
+      } else {
+        JobApplicant.findByPk(userData.uid )
+          .then((jobApplicant) => {
+            if (jobApplicant === null) {
+              res.status(404).json({
+                message: "User does not exist",
+              });
+              return;
+            }
+            res.json(jobApplicant);
+          })
+          .catch((err) => {
+            res.status(400).json(err);
+          });
+      }
+    })
+    .catch((err) => {
+      res.status(400).json(err);
+    });
+});
+
+// update user details
+router.put("/user", jwtAuth, (req, res) => {
+  const user = req.user;
+  const data = req.body;
+  if (user.type == "recruiter") {
+    Recruiter.findByPk(user.uid)
+      .then((recruiter) => {
+        if (recruiter == null) {
+          res.status(404).json({
+            message: "User does not exist",
+          });
+          return;
+        }
+        const updatingData={name:data.name,contactNumber:data.contactNumber,bio:data.bio}
+        recruiter.update(updatingData).then(() => {
+          res.json({
+            message: "User information updated successfully",
+          });
+        })
+        .catch((err) => {
+          res.status(400).json(err);
+        });
+        
+        
+      })
+      .catch((err) => {
+        res.status(400).json(err);
+      });
+  } else {
+    JobApplicant.findByPk( user.uid )
+      .then((jobApplicant) => {
+        if (jobApplicant == null) {
+          res.status(404).json({
+            message: "User does not exist",
+          });
+          return;
+        }
+        const updatingData={name:data.name,education:data.education,skills:data.skills,resume:data.resume,profile:data.profile}
+     
+        console.log(jobApplicant);
+        jobApplicant
+          .update(updatingData)
+          .then(() => {
+            res.json({
+              message: "User information updated successfully",
+            });
+          })
+          .catch((err) => {
+            res.status(400).json(err);
+          });
+      })
+      .catch((err) => {
+        res.status(400).json(err);
+      });
+  }
+});
+
 module.exports = router;

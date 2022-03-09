@@ -6,6 +6,8 @@ import Navbar from "./component/Navbar";
 import Login from "./component/Login";
 import Logout from "./component/Logout";
 import Signup from "./component/Signup";
+import Profile from "./component/Profile";
+import RecruiterProfile from "./component/recruiter/Profile";
 import isAuth, { userType } from "./lib/isAuth";
 import CreateJobs from "../src/component/recruiter/CreateJobs"
 import MyJobs from "./component/recruiter/MyJobs";
@@ -50,13 +52,13 @@ function App() {
               <Route exact path="/logout">
                 <Logout />
               </Route>
-              {/* <Route exact path="/profile">
+              <Route exact path="/profile">
                 {userType() === "recruiter" ? (
                   <RecruiterProfile />
                 ) : (
                   <Profile />
                 )}
-              </Route> */}
+              </Route>
               <Route exact path="/addjob">
                 <CreateJobs />
               </Route>
