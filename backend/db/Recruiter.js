@@ -36,8 +36,11 @@ const Recruiter = sequelize.define(
   },
   {
     timestamps: false,
+    freezeTableName: true
   }
 );
-Recruiter.sync().then(() => console.log("Table Recruiter Created"));
+
+
+// Recruiter.sync().then(() => console.log("Table Recruiter Created"));
 
 module.exports = Recruiter;

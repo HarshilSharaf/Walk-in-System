@@ -90,13 +90,13 @@ passport.use(
     (jwt_payload, done) => {
       User.findByPk(jwt_payload._id)
         .then((user) => {
-          console.log(Object.keys(jwt_payload));
+          // console.log(Object.keys(jwt_payload));
           if (!user) {
             return done(null, false, {
               message: "JWT Token does not exist",
             });
           }
-          console.log(user)
+          // console.log(user)
           // user["_id"] = filterJson(user["_doc"], ["password", "__v"]);
           return done(null, user);
         })

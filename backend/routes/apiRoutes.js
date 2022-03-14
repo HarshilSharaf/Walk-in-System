@@ -3,16 +3,21 @@ const Op  = Sequelize.Op
 const express = require("express");
 const router = express.Router();
 const uuid = require('uuid');
-const JOB = require('../db/Job')
 const jwtAuth = require("../lib/jwtAuth");
-const Recruiter =require('../db/Recruiter')
-const JobApplicant = require('../db/JobApplicant')
-const User = require("../db/User")
+const {User,JOB,JobApplicant,Recruiter,sequelize} = require('../db/models')
+// JOB.associate= (models)=>{
+//   JOB.belongsTo(models.Recruiter)
+//   return JOB
+// }
+// Recruiter.associate=(models)=>{
+//   Recruiter.hasMany(models.JOB)
+// return Recruiter
+// }
 
+// sequelize.sync({alter:true,force:false})
 
 router.post("/jobs", jwtAuth, (req, res) => {
   const user = req.user;
-
   if (user.type != "recruiter") {
     res.status(401).json({
       message: "You don't have permissions to add jobs",
@@ -46,7 +51,7 @@ router.post("/jobs", jwtAuth, (req, res) => {
 });
 
 // to get all the jobs [pagination] [for recruiter personal and for everyone]
-router.get("/jobs", jwtAuth, (req, res) => {
+router.get("/jobs", jwtAuth, async (req, res) => {
   let user = req.user;
 
   let findParams = {};
@@ -80,7 +85,7 @@ router.get("/jobs", jwtAuth, (req, res) => {
     } else {
       jobTypes = [req.query.jobType];
     }
-    console.log(jobTypes);
+    // console.log(jobTypes);
     findParams = {
       ...findParams,
       jobType: {
@@ -145,20 +150,17 @@ router.get("/jobs", jwtAuth, (req, res) => {
   else {sortParams.push([req.query.desc,'DESC'])}
   }
 
-  console.log("FindParams are:",findParams);
-  console.log("SortParams are:",sortParams);
-
  
   let queryParams = {
     where: findParams,
-    order: sortParams
-
+    order: sortParams,
+    include: [{model:Recruiter, attributes:['name'],required: true}]
   }
 
 
-  console.log("QueryParams are:",queryParams);
+  // console.log("QueryParams are:",queryParams);
 
-  JOB.findAll(queryParams)
+  await JOB.findAll(queryParams)
     .then((posts) => {
       if (posts == null) {
         res.status(404).json({
@@ -169,10 +171,106 @@ router.get("/jobs", jwtAuth, (req, res) => {
       res.json(posts);
     })
     .catch((err) => {
+      console.log("ERROR JOINING:",err)
       res.status(400).json(err);
     });
 });
 
+
+// to get info about a particular job
+router.get("/jobs/:id", jwtAuth, (req, res) => {
+  JOB.findByPk(req.params.id)
+    .then((job) => {
+      if (job == null) {
+        res.status(400).json({
+          message: "Job does not exist",
+        });
+        return;
+      }
+      res.json(job);
+    })
+    .catch((err) => {
+      res.status(400).json(err);
+    });
+});
+
+// to update info of a particular job
+router.put("/jobs/:id", jwtAuth, (req, res) => {
+  const user = req.user;
+  if (user.type != "recruiter") {
+    res.status(401).json({
+      message: "You don't have permissions to change the job details",
+    });
+    return;
+  }
+  JOB.findOne({
+    where: {
+      jid: req.params.id,
+      rid: user.uid,
+    }
+   
+  })
+    .then((job) => {
+      if (job == null) {
+        res.status(404).json({
+          message: "Job does not exist",
+        });
+        return;
+      }
+      const data = req.body;
+      if (data.maxApplicants) {
+        job.maxApplicants = data.maxApplicants;
+      }
+      if (data.maxPositions) {
+        job.maxPositions = data.maxPositions;
+      }
+      if (data.deadline) {
+        job.deadline = data.deadline;
+      }
+      job
+        .save()
+        .then(() => {
+          res.json({
+            message: "Job details updated successfully",
+          });
+        })
+        .catch((err) => {
+          res.status(400).json(err);
+        });
+    })
+    .catch((err) => {
+      res.status(400).json(err);
+    });
+});
+
+// to delete a job
+router.delete("/jobs/:id", jwtAuth, (req, res) => {
+  const user = req.user;
+  if (user.type != "recruiter") {
+    res.status(401).json({
+      message: "You don't have permissions to delete the job",
+    });
+    return;
+  }
+  JOB.Destroy({
+    jid: req.params.id,
+    rid: user.uid,
+  })
+    .then((job) => {
+      if (job === null) {
+        res.status(401).json({
+          message: "You don't have permissions to delete the job",
+        });
+        return;
+      }
+      res.json({
+        message: "Job deleted successfully",
+      });
+    })
+    .catch((err) => {
+      res.status(400).json(err);
+    });
+});
 
 // get user's personal details
 router.get("/user", jwtAuth, (req, res) => {
@@ -236,6 +334,7 @@ router.get("/user/:id", jwtAuth, (req, res) => {
       } else {
         JobApplicant.findByPk(userData.uid )
           .then((jobApplicant) => {
+            console.log("JOBAPPLICANT DETAILS:",jobApplicant)
             if (jobApplicant === null) {
               res.status(404).json({
                 message: "User does not exist",
@@ -250,6 +349,7 @@ router.get("/user/:id", jwtAuth, (req, res) => {
       }
     })
     .catch((err) => {
+      console.log("Error:",err)
       res.status(400).json(err);
     });
 });
@@ -292,8 +392,6 @@ router.put("/user", jwtAuth, (req, res) => {
           return;
         }
         const updatingData={name:data.name,education:data.education,skills:data.skills,resume:data.resume,profile:data.profile}
-     
-        console.log(jobApplicant);
         jobApplicant
           .update(updatingData)
           .then(() => {

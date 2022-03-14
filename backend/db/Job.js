@@ -1,6 +1,7 @@
 const Sequelize = require("sequelize");
 const sequelize = require("./Connection");
 const { DataTypes } = require("sequelize");
+const Recruiter = require("./Recruiter");
 const Job = sequelize.define("jobs",
     {
         jid: {
@@ -124,19 +125,20 @@ const Job = sequelize.define("jobs",
                }
             },
         },
-        rid:{
-            type:Sequelize.UUID,
-            allowNull:false,
-            references:{
-                model:'recruiters',
-                key:'rid'
-            }
-        }
+        // rid:{
+        //     type:Sequelize.UUID,
+        //     allowNull:false,
+        //     references:{
+        //         model:'recruiter',
+        //         key:'rid'
+        //     }
+        // }
     }
 ,{
     timestamps: false,
   }
 )
 
-Job.sync().then(() => console.log("Table Jobs Created"))
+
+// Job.sync().then(() => console.log("Table Jobs Created"))
 module.exports = Job
