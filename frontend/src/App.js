@@ -9,11 +9,11 @@ import Signup from "./component/Signup";
 import Profile from "./component/Profile";
 import RecruiterProfile from "./component/recruiter/Profile";
 import isAuth, { userType } from "./lib/isAuth";
-import CreateJobs from "../src/component/recruiter/CreateJobs"
+import CreateJobs from "../src/component/recruiter/CreateJobs";
 import MyJobs from "./component/recruiter/MyJobs";
-import Home  from "./component/Home";
+import Home from "./component/Home";
 import JobApplications from "./component/recruiter/JobApplications";
-import AcceptedApplicants from './component/recruiter/AcceptedApplicants'
+import AcceptedApplicants from "./component/recruiter/AcceptedApplicants";
 import Welcome, { ErrorPage } from "./component/Welcome";
 
 const useStyles = makeStyles((theme) => ({
@@ -26,6 +26,7 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: "64px",
     boxSizing: "border-box",
     width: "100%",
+    backgroundColor: "#fefefe",
   },
 }));
 
@@ -43,11 +44,11 @@ function App() {
       <SetPopupContext.Provider value={setPopup}>
         <Grid container direction="column">
           <Grid item xs>
-            <Navbar id="navbar"/>
+            <Navbar id="navbar" />
           </Grid>
           <Grid item className={classes.body}>
             <Switch>
-            <Route exact path="/">
+              <Route exact path="/">
                 <Welcome />
               </Route>
               <Route exact path="/login">
@@ -81,9 +82,9 @@ function App() {
               <Route exact path="/employees">
                 <AcceptedApplicants />
               </Route>
-             
-                <ErrorPage />
-              </Switch>
+
+              <ErrorPage />
+            </Switch>
           </Grid>
         </Grid>
         <MessagePopup
