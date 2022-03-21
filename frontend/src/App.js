@@ -16,6 +16,7 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: "64px",
     boxSizing: "border-box",
     width: "100%",
+    backgroundColor: "#fefefe",
   },
 }));
 
@@ -40,11 +41,13 @@ function App() {
               <Route exact path="/">
                 <Login />
               </Route>
-
+              <Route exact path="/login">
+                <Login />
+              </Route>
               <Route exact path="/signup">
                 <Signup />
               </Route>
-              </Switch>
+            </Switch>
           </Grid>
         </Grid>
         <MessagePopup

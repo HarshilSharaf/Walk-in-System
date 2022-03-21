@@ -30,7 +30,6 @@ const useStyles = makeStyles((theme) => ({
     padding: "60px 60px",
     margin: "10px 0px",
     fontFamily: "Roboto",
-    boxShadow: "0px 0px 1px",
   },
   inputBox: {
     width: "600px",
