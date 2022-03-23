@@ -61,14 +61,16 @@ const ApplicationTile = (props) => {
 
   const fetchRating = () => {
     axios
-      .get(`${apiList.rating}?id=${application.job._id}`, {
+      .get(`${apiList.rating}?id=${application.job.jid}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       })
       .then((response) => {
         setRating(response.data.rating);
+
         console.log(response.data);
+        
       })
       .catch((err) => {
         // console.log(err.response);
@@ -85,7 +87,7 @@ const ApplicationTile = (props) => {
     axios
       .put(
         apiList.rating,
-        { rating: rating, jobId: application.job._id },
+        { rating: rating, jobId: application.job.jid },
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
