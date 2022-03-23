@@ -11,10 +11,10 @@ const Applications = sequelize.define('applications', {
         allowNull: false,
         primaryKey: true,
     },
-    rid: {
-        type: Sequelize.UUID,
-        allowNull: false,
-    },
+    // rid: {
+    //     type: Sequelize.UUID,
+    //     allowNull: false,
+    // },
     // jid: {
     //     type: Sequelize.UUID,
     //     allowNull: false,

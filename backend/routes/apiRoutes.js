@@ -570,7 +570,7 @@ router.get("/applications", jwtAuth, (req, res) => {
   // const skip = page - 1 >= 0 ? (page - 1) * limit : 0;
   console.log("Req received")
   if (user.type == "recruiter") {
-    Applications.findAll({ where: { rid: user.uid }, order: ['dateOfPosting', 'ASC'] })
+    Applications.findAll({ where: { rid: user.uid } ,include:[{model:JOB,order: ['dateOfPosting', 'ASC']},{model:Recruiter}]})
       .then((applications) => {
         res.json(applications);
       })
@@ -578,11 +578,9 @@ router.get("/applications", jwtAuth, (req, res) => {
         console.log(err)
         res.status(400).json(err);
       });
-
-
   }
   else {
-    Applications.findAll({ where: { aid: user.uid }, order: ['dateOfPosting', 'ASC'] })
+    Applications.findAll({ where: { aid: user.uid },include:[{model:JOB,order: ['dateOfPosting', 'ASC']},{model:Recruiter}]})
       .then((applications) => {
         res.json(applications);
       })

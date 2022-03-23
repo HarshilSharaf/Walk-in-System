@@ -6,6 +6,7 @@ const Recruiter = require('./Recruiter')
 const sequelize = require('../db/Connection')
 const Sequelize = require("sequelize");
 const Rating = require('./Rating')
+const { DataTypes } = require("sequelize");
 
 JOB.belongsTo(Recruiter, {
     foreignKey: {
@@ -22,6 +23,15 @@ Applications.belongsTo(JOB,{
         allowNull: false,
     }
 })
+// Applications.belongsTo(JOB,{
+//     foreignKey:{
+//         name: 'dateOfPosting',
+//         type: DataTypes.DATE,
+//         defaultValue: DataTypes.NOW
+        
+//     },
+//     targetKey:'dateOfPosting'
+// })
 Applications.belongsTo(JobApplicant,{
     foreignKey: {
         name: 'aid', 
@@ -32,6 +42,11 @@ Applications.belongsTo(JobApplicant,{
 })
 // JOB.hasMany(Applications)
 
+Applications.belongsTo(Recruiter,{
+    foreignKey:'rid',
+    type: Sequelize.UUID,
+    allowNull: false,
+})
 
 
 sequelize.sync({ alter:true,force: false }).then(() => console.log("All Tables Created Successfully"))
