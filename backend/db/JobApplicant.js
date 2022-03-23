@@ -2,7 +2,7 @@ const Sequelize = require("sequelize");
 const { DataTypes } = require("sequelize");
 const sequelize = require("./Connection");
 const JobApplicant = sequelize.define(
-  "applicant",
+  "Jobapplicant",
   {
     aid: {
       type: Sequelize.UUID,
@@ -49,6 +49,12 @@ const JobApplicant = sequelize.define(
         },
       },
     },
+    rating:{
+      type:Sequelize.INTEGER,
+      defaultValue: -1,
+      min: -1,
+      max: 5.0
+  }
   },
   {
     timestamps: false,

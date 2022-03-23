@@ -7,6 +7,7 @@ import Login from "./component/Login";
 import Logout from "./component/Logout";
 import Signup from "./component/Signup";
 import Profile from "./component/Profile";
+import Applications from "./component/Applications";
 import RecruiterProfile from "./component/recruiter/Profile";
 import isAuth, { userType } from "./lib/isAuth";
 import CreateJobs from "../src/component/recruiter/CreateJobs";
@@ -78,6 +79,9 @@ function App() {
               </Route>
               <Route exact path="/job/applications/:jobId">
                 <JobApplications />
+              </Route>
+              <Route exact path="/applications">
+                <Applications />
               </Route>
               <Route exact path="/employees">
                 <AcceptedApplicants />

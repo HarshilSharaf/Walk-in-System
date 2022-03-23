@@ -69,7 +69,6 @@ const JobTile = (props) => {
   const [openUpdate, setOpenUpdate] = useState(false);
   const [jobDetails, setJobDetails] = useState(job);
 
-  console.log(jobDetails);
 
   const handleInput = (key, value) => {
     setJobDetails({
@@ -91,7 +90,6 @@ const JobTile = (props) => {
   };
 
   const handleDelete = () => {
-    console.log(job._id);
     axios
       .delete(`${apiList.jobs}/${job._id}`, {
         headers: {
@@ -181,7 +179,7 @@ const JobTile = (props) => {
               variant="contained"
               color="primary"
               className={classes.statusBlock}
-              onClick={() => handleClick(`/job/applications/${job._id}`)}
+              onClick={() => handleClick(`/job/applications/${job.jid}`)}
             >
               View Applications
             </Button>
@@ -758,13 +756,11 @@ const MyJobs = (props) => {
     });
     searchParams = [...searchParams, ...asc, ...desc];
     const queryString = searchParams.join("&");
-    console.log(queryString);
     let address = apiList.jobs;
     if (queryString !== "") {
       address = `${address}?${queryString}`;
     }
 
-    console.log(address);
     axios
       .get(address, {
         headers: {

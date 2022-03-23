@@ -54,7 +54,6 @@ const CreateJobs = (props) => {
   };
 
   const handleUpdate = () => {
-    console.log(jobDetails);
     axios
       .post(apiList.jobs, jobDetails, {
         headers: {

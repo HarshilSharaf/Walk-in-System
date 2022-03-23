@@ -50,7 +50,6 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
   },
 }));
-let recruiterId = []
 const JobTile = (props) => {
   const classes = useStyles();
   const { job } = props;
@@ -64,8 +63,7 @@ const JobTile = (props) => {
   };
 
   const handleApply = () => {
-    console.log(job._id);
-    console.log(sop);
+   
     axios
       .post(
         `${apiList.jobs}/${job.jid}/applications`,
@@ -590,7 +588,6 @@ const Home = (props) => {
     });
     searchParams = [...searchParams, ...asc, ...desc];
     const queryString = searchParams.join("&");
-    console.log(queryString);
     let address = apiList.jobs;
     if (queryString !== "") {
       address = `${address}?${queryString}`;
@@ -603,21 +600,6 @@ const Home = (props) => {
         },
       })
       .then((response) => {
-        console.log("Response for JOb:", response.data);
-        response.data.forEach((obj) => {
-          recruiterId.push(obj.rid)
-        })
-        console.log(recruiterId)
-        // recruiterId.forEach((id)=>{
-        //   axios
-        //   .get(`${apiList.user}/${String(id)}`, {
-        //     headers: {
-        //       Authorization: `Bearer ${localStorage.getItem("token")}`,
-        //     },
-        //   }).then((res) => {
-        //     console.log(res)
-        
-        //   })
         
         // })
         // let temp=[]

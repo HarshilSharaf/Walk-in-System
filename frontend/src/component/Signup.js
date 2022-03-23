@@ -213,7 +213,6 @@ const Login = (props) => {
       education[i].endYear = +education[i].endYear;
     }
 
-    console.log(education);
     let updatedDetails = {
       ...signupDetails,
       education: education,
@@ -293,7 +292,6 @@ const Login = (props) => {
       return tmpErrorHandler[obj].error;
     });
 
-    console.log(updatedDetails);
 
     if (verified) {
       axios

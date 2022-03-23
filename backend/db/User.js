@@ -21,8 +21,16 @@ const User = sequelize.define(
       allowNull: false,
     },
     type: {
-      type: Sequelize.ENUM("recruiter", "applicant"),
+      type: Sequelize.STRING,
       allowNull: false,
+      validate:{
+        typeValidator: (value)=>{
+          const enums =["recruiter", "applicant"]
+          if (!enums.includes(value)){
+            throw new Error('Not a valid User type')
+          }
+        }
+      }
     },
     created_on: {
       type: Sequelize.DATE,

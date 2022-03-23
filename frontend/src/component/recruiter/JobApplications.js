@@ -160,14 +160,14 @@ const FilterPopup = (props) => {
                 <Grid item>
                   <Checkbox
                     name="name"
-                    checked={searchOptions.sort["jobApplicant.name"].status}
+                    checked={searchOptions.sort["Jobapplicant.name"].status}
                     onChange={(event) =>
                       setSearchOptions({
                         ...searchOptions,
                         sort: {
                           ...searchOptions.sort,
-                          "jobApplicant.name": {
-                            ...searchOptions.sort["jobApplicant.name"],
+                          "Jobapplicant.name": {
+                            ...searchOptions.sort["Jobapplicant.name"],
                             status: event.target.checked,
                           },
                         },
@@ -183,21 +183,21 @@ const FilterPopup = (props) => {
                 </Grid>
                 <Grid item>
                   <IconButton
-                    disabled={!searchOptions.sort["jobApplicant.name"].status}
+                    disabled={!searchOptions.sort["Jobapplicant.name"].status}
                     onClick={() => {
                       setSearchOptions({
                         ...searchOptions,
                         sort: {
                           ...searchOptions.sort,
-                          "jobApplicant.name": {
-                            ...searchOptions.sort["jobApplicant.name"],
-                            desc: !searchOptions.sort["jobApplicant.name"].desc,
+                          "Jobapplicant.name": {
+                            ...searchOptions.sort["Jobapplicant.name"],
+                            desc: !searchOptions.sort["Jobapplicant.name"].desc,
                           },
                         },
                       });
                     }}
                   >
-                    {searchOptions.sort["jobApplicant.name"].desc ? (
+                    {searchOptions.sort["Jobapplicant.name"].desc ? (
                       <ArrowDownwardIcon />
                     ) : (
                       <ArrowUpwardIcon />
@@ -272,14 +272,14 @@ const FilterPopup = (props) => {
                 <Grid item>
                   <Checkbox
                     name="rating"
-                    checked={searchOptions.sort["jobApplicant.rating"].status}
+                    checked={searchOptions.sort["Jobapplicant.rating"].status}
                     onChange={(event) =>
                       setSearchOptions({
                         ...searchOptions,
                         sort: {
                           ...searchOptions.sort,
-                          "jobApplicant.rating": {
-                            ...searchOptions.sort[["jobApplicant.rating"]],
+                          "Jobapplicant.rating": {
+                            ...searchOptions.sort[["Jobapplicant.rating"]],
                             status: event.target.checked,
                           },
                         },
@@ -295,22 +295,22 @@ const FilterPopup = (props) => {
                 </Grid>
                 <Grid item>
                   <IconButton
-                    disabled={!searchOptions.sort["jobApplicant.rating"].status}
+                    disabled={!searchOptions.sort["Jobapplicant.rating"].status}
                     onClick={() => {
                       setSearchOptions({
                         ...searchOptions,
                         sort: {
                           ...searchOptions.sort,
-                          "jobApplicant.rating": {
-                            ...searchOptions.sort["jobApplicant.rating"],
-                            desc: !searchOptions.sort["jobApplicant.rating"]
+                          "Jobapplicant.rating": {
+                            ...searchOptions.sort["Jobapplicant.rating"],
+                            desc: !searchOptions.sort["Jobapplicant.rating"]
                               .desc,
                           },
                         },
                       });
                     }}
                   >
-                    {searchOptions.sort["jobApplicant.rating"].desc ? (
+                    {searchOptions.sort["Jobapplicant.rating"].desc ? (
                       <ArrowDownwardIcon />
                     ) : (
                       <ArrowUpwardIcon />
@@ -361,11 +361,10 @@ const ApplicationTile = (props) => {
 
   const getResume = () => {
     if (
-      application.jobApplicant.resume &&
-      application.jobApplicant.resume !== ""
+      application.Jobapplicant.resume &&
+      application.Jobapplicant.resume !== ""
     ) {
-      const address = `${server}${application.jobApplicant.resume}`;
-      console.log(address);
+      const address = server+application.Jobapplicant.resume;
       axios(address, {
         method: "GET",
         responseType: "blob",
@@ -376,7 +375,6 @@ const ApplicationTile = (props) => {
           window.open(fileURL);
         })
         .catch((error) => {
-          console.log(error);
           setPopup({
             open: true,
             severity: "error",
@@ -393,7 +391,7 @@ const ApplicationTile = (props) => {
   };
 
   const updateStatus = (status) => {
-    const address = `${apiList.applications}/${application._id}`;
+    const address = `${apiList.applications}/${application.applicationId}`;
     const statusData = {
       status: status,
       dateOfJoining: new Date().toISOString(),
@@ -554,21 +552,21 @@ const ApplicationTile = (props) => {
           }}
         >
           <Avatar
-            src={`${server}${application.jobApplicant.profile}`}
+            src={`${server}${application.Jobapplicant.profile}`}
             className={classes.avatar}
           />
         </Grid>
         <Grid container item xs={7} spacing={1} direction="column">
           <Grid item>
             <Typography variant="h5">
-              {application.jobApplicant.name}
+              {application.Jobapplicant.name}
             </Typography>
           </Grid>
           <Grid item>
             <Rating
               value={
-                application.jobApplicant.rating !== -1
-                  ? application.jobApplicant.rating
+                application.Jobapplicant.rating !== -1
+                  ? application.Jobapplicant.rating
                   : null
               }
               readOnly
@@ -577,7 +575,7 @@ const ApplicationTile = (props) => {
           <Grid item>Applied On: {appliedOn.toLocaleDateString()}</Grid>
           <Grid item>
             Education:{" "}
-            {application.jobApplicant.education
+            {application.Jobapplicant.education
               .map((edu) => {
                 return `${edu.institutionName} (${edu.startYear}-${
                   edu.endYear ? edu.endYear : "Ongoing"
@@ -589,7 +587,7 @@ const ApplicationTile = (props) => {
             SOP: {application.sop !== "" ? application.sop : "Not Submitted"}
           </Grid>
           <Grid item>
-            {application.jobApplicant.skills.map((skill) => (
+            {application.Jobapplicant.skills.map((skill) => (
               <Chip label={skill} style={{ marginRight: "2px" }} />
             ))}
           </Grid>
@@ -648,7 +646,7 @@ const JobApplications = (props) => {
       shortlisted: false,
     },
     sort: {
-      "jobApplicant.name": {
+      "Jobapplicant.name": {
         status: false,
         desc: false,
       },
@@ -656,7 +654,7 @@ const JobApplications = (props) => {
         status: true,
         desc: true,
       },
-      "jobApplicant.rating": {
+      "Jobapplicant.rating": {
         status: false,
         desc: false,
       },
@@ -695,13 +693,12 @@ const JobApplications = (props) => {
     });
     searchParams = [...searchParams, ...asc, ...desc];
     const queryString = searchParams.join("&");
-    console.log(queryString);
+    console.log("QueryString:",queryString);
     let address = `${apiList.applicants}?jobId=${jobId}`;
     if (queryString !== "") {
       address = `${address}&${queryString}`;
     }
 
-    console.log(address);
 
     axios
       .get(address, {
@@ -714,7 +711,7 @@ const JobApplications = (props) => {
         setApplications(response.data);
       })
       .catch((err) => {
-        console.log(err.response);
+        console.log(err);
         // console.log(err.response.data);
         setApplications([]);
         setPopup({
@@ -754,7 +751,6 @@ const JobApplications = (props) => {
           {applications.length > 0 ? (
             applications.map((obj) => (
               <Grid item>
-                {/* {console.log(obj)} */}
                 <ApplicationTile application={obj} getData={getData} />
               </Grid>
             ))

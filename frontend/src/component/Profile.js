@@ -144,7 +144,6 @@ const Profile = (props) => {
         },
       })
       .then((response) => {
-        console.log(response.data);
         setProfileDetails(response.data);
         if (response.data.education.length > 0) {
           setEducation(
@@ -175,7 +174,6 @@ const Profile = (props) => {
   };
 
   const handleUpdate = () => {
-    console.log(education);
 
     let updatedDetails = {
       ...profileDetails,
