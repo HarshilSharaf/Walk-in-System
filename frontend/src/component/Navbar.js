@@ -24,8 +24,8 @@ const useStyles = makeStyles((theme) => ({
   },
   Toolbar: {
     boxShadow: "0px 0px",
-    backgroundColor: colors.cyan[50],
-    color: colors.blueGrey[700],
+    backgroundColor: "#222",
+    color: "#fff",
   },
   button: {
     fontFamily: "Montserrat",
@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
   },
   noBox: {
     boxShadow: "0px 0px",
-    backgroundColor: "#fff",
+    backgroundColor: "#222",
   },
 }));
 

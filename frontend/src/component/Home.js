@@ -33,15 +33,19 @@ const useStyles = makeStyles((theme) => ({
   body: {
     height: "inherit",
   },
+  noShadow: {
+    boxShadow: "none",
+  },
   button: {
     width: "100%",
-    height: "100%",
+    height: "50px",
   },
   jobTileOuter: {
     padding: "30px",
-    margin: "20px 0",
+    margin: "20px 5%",
     boxSizing: "border-box",
-    width: "100%",
+    boxShadow: "none",
+    width: "90%",
   },
   popupDialog: {
     height: "100%",
@@ -63,7 +67,6 @@ const JobTile = (props) => {
   };
 
   const handleApply = () => {
-   
     axios
       .post(
         `${apiList.jobs}/${job.jid}/applications`,
@@ -201,7 +204,7 @@ const FilterPopup = (props) => {
               item
               xs={9}
               justify="space-around"
-            // alignItems="center"
+              // alignItems="center"
             >
               <Grid item>
                 <FormControlLabel
@@ -600,7 +603,6 @@ const Home = (props) => {
         },
       })
       .then((response) => {
-        
         // })
         // let temp=[]
         // response.forEach((obj)=>temp.push(obj.rid))
@@ -619,7 +621,6 @@ const Home = (props) => {
             const deadline = new Date(obj.deadline);
 
             return deadline > today;
-
           })
         );
       })

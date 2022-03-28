@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: "64px",
     boxSizing: "border-box",
     width: "100%",
-    backgroundColor: "#fefefe",
+    backgroundColor: "#f1f4f7",
   },
 }));
 

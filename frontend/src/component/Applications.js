@@ -39,6 +39,7 @@ const useStyles = makeStyles((theme) => ({
     padding: "30px",
     margin: "20px 0",
     boxSizing: "border-box",
+    boxShadow: "none",
     width: "100%",
   },
   popupDialog: {
@@ -70,7 +71,6 @@ const ApplicationTile = (props) => {
         setRating(response.data.rating);
 
         console.log(response.data);
-        
       })
       .catch((err) => {
         // console.log(err.response);
@@ -167,7 +167,7 @@ const ApplicationTile = (props) => {
                 color: "#ffffff",
               }}
             >
-              {application.status}
+              Application Status: {application.status}
             </Paper>
           </Grid>
           {application.status === "accepted" ||
