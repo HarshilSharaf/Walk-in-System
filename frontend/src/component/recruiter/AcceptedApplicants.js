@@ -407,7 +407,7 @@ const ApplicationTile = (props) => {
     axios
       .put(
         apiList.rating,
-        { rating: rating, applicantId: application.Jobapplicant.userId },
+        { rating: rating, applicantId: application.Jobapplicant.aid },
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,

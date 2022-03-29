@@ -4,7 +4,7 @@ const express = require("express");
 const router = express.Router();
 const uuid = require('uuid');
 const jwtAuth = require("../lib/jwtAuth");
-const { User, JOB, JobApplicant, Recruiter, sequelize, Applications } = require('../db/models')
+const { User, JOB, JobApplicant, Recruiter, Applications, Rating } = require('../db/models')
 
 
 router.post("/jobs", jwtAuth, (req, res) => {
@@ -76,7 +76,6 @@ router.get("/jobs", jwtAuth, async (req, res) => {
     } else {
       jobTypes = [req.query.jobType];
     }
-    // console.log(jobTypes);
     findParams = {
       ...findParams,
       jobType: {
@@ -149,7 +148,6 @@ router.get("/jobs", jwtAuth, async (req, res) => {
   }
 
 
-  // console.log("QueryParams are:",queryParams);
 
   await JOB.findAll(queryParams)
     .then((posts) => {
@@ -162,7 +160,6 @@ router.get("/jobs", jwtAuth, async (req, res) => {
       res.json(posts);
     })
     .catch((err) => {
-      console.log("ERROR JOINING:", err)
       res.status(400).json(err);
     });
 });
@@ -325,7 +322,6 @@ router.get("/user/:id", jwtAuth, (req, res) => {
       } else {
         JobApplicant.findByPk(userData.uid)
           .then((jobApplicant) => {
-            console.log("JOBAPPLICANT DETAILS:", jobApplicant)
             if (jobApplicant === null) {
               res.status(404).json({
                 message: "User does not exist",
@@ -340,7 +336,6 @@ router.get("/user/:id", jwtAuth, (req, res) => {
       }
     })
     .catch((err) => {
-      console.log("Error:", err)
       res.status(400).json(err);
     });
 });
@@ -408,7 +403,6 @@ router.post("/jobs/:id/applications", jwtAuth, (req, res) => {
     });
     return;
   }
-  console.log("USER DETAILS:", user)
   const data = req.body;
   const jobId = req.params.id;
 
@@ -428,7 +422,6 @@ router.post("/jobs/:id/applications", jwtAuth, (req, res) => {
     }
   })
     .then((appliedApplication) => {
-      console.log(appliedApplication);
       if (appliedApplication !== null) {
         res.status(400).json({
           message: "You have already applied for this job",
@@ -568,24 +561,21 @@ router.get("/applications", jwtAuth, (req, res) => {
   // const page = parseInt(req.query.page) ? parseInt(req.query.page) : 1;
   // const limit = parseInt(req.query.limit) ? parseInt(req.query.limit) : 10;
   // const skip = page - 1 >= 0 ? (page - 1) * limit : 0;
-  console.log("Req received")
   if (user.type == "recruiter") {
-    Applications.findAll({ where: { rid: user.uid } ,include:[{model:JOB,order: ['dateOfPosting', 'ASC']},{model:Recruiter}]})
+    Applications.findAll({ where: { rid: user.uid }, include: [{ model: JOB, order: ['dateOfPosting', 'ASC'] }, { model: Recruiter }] })
       .then((applications) => {
         res.json(applications);
       })
       .catch((err) => {
-        console.log(err)
         res.status(400).json(err);
       });
   }
   else {
-    Applications.findAll({ where: { aid: user.uid },include:[{model:JOB,order: ['dateOfPosting', 'ASC']},{model:Recruiter}]})
+    Applications.findAll({ where: { aid: user.uid }, include: [{ model: JOB, order: ['dateOfPosting', 'ASC'] }, { model: Recruiter }] })
       .then((applications) => {
         res.json(applications);
       })
       .catch((err) => {
-        console.log(err)
         res.status(400).json(err);
       });
   }
@@ -596,7 +586,6 @@ router.get("/applications", jwtAuth, (req, res) => {
 router.put("/applications/:id", jwtAuth, (req, res) => {
   const user = req.user;
   const applicationId = req.params.id;
-  console.log("APPLICATION ID is:", applicationId)
   const status = req.body.status;
 
   // "applied", // when a applicant is applied
@@ -766,7 +755,6 @@ router.put("/applications/:id", jwtAuth, (req, res) => {
       }
       )
         .then((tmp) => {
-          console.log(tmp);
           res.json({
             message: `Application ${status} successfully`,
           });
@@ -847,7 +835,6 @@ router.get("/applicants", jwtAuth, (req, res) => {
         res.json(applications);
       })
       .catch((err) => {
-        console.log("ERRROR OCCURED:", err)
         res.status(400).json(err);
       });
   } else {
@@ -855,6 +842,338 @@ router.get("/applicants", jwtAuth, (req, res) => {
       message: "You are not allowed to access applicants list",
     });
   }
+});
+
+// to add or update a rating [todo: test]
+router.put("/rating", jwtAuth, (req, res) => {
+  const user = req.user;
+  const data = req.body;
+  if (user.type === "recruiter") {
+    // can rate applicant
+    Rating.findOne({
+      where: {
+        senderId: user.uid,
+        receiverId: data.applicantId,
+        category: "applicant",
+      }
+    })
+      .then((rating) => {
+        if (rating === null) {
+          Applications.count({
+            where: {
+              aid: data.applicantId,
+              rid: user.uid,
+              status: {
+                [Op.in]: ["accepted", "finished"],
+              },
+            }
+          })
+            .then((acceptedApplicant) => {
+              if (acceptedApplicant > 0) {
+                // add a new rating
+                ratingData = {
+                  category: "applicant",
+                  receiverId: data.applicantId,
+                  senderId: user.uid,
+                  rating: data.rating,
+                }
+
+                Rating
+                  .create(ratingData)
+                  .then(() => {
+                    // get the average of ratings
+                    Rating.findAll({
+                      where: {
+                        receiverId: data.applicantId,
+                        category: "applicant",
+                      },
+                      attributes: [[Sequelize.fn('avg', Sequelize.col('rating')), 'average']]
+                    }
+
+                    )
+                      .then((result) => {
+                        // update the user's rating
+                        if (result === null) {
+                          res.status(400).json({
+                            message: "Error while calculating rating",
+                          });
+                          return;
+                        }
+                        const avg = Math.round(result[0].dataValues.average);
+
+                        JobApplicant.update(
+                          {
+                            rating: avg,
+                          },
+                          {
+                            where: {
+                              aid: data.applicantId,
+                            }
+                          },
+                        )
+                          .then((applicant) => {
+                            if (applicant === null) {
+                              res.status(400).json({
+                                message:
+                                  "Error while updating applicant's average rating",
+                              });
+                              return;
+                            }
+                            res.json({
+                              message: "Rating added successfully",
+                            });
+                          })
+                          .catch((err) => {
+                            res.status(400).json(err);
+                          });
+                      })
+                      .catch((err) => {
+                        res.status(400).json(err);
+                      });
+                  })
+                  .catch((err) => {
+                    res.status(400).json(err);
+                  });
+              } else {
+                // you cannot rate
+                res.status(400).json({
+                  message:
+                    "Applicant didn't worked under you. Hence you cannot give a rating.",
+                });
+              }
+            })
+            .catch((err) => {
+              res.status(400).json(err);
+            });
+        } else {
+          // rating.dataValues.rating = data.rating;
+          Rating
+            .update({rating:data.rating},{
+              where:{
+                receiverId: data.applicantId,
+                  category: "applicant"
+              }
+            })
+            .then(() => {
+              // get the average of ratings
+              Rating.findAll({
+                where: {
+                  receiverId: data.applicantId,
+                  category: "applicant"
+                },
+                attributes: [[Sequelize.fn('avg', Sequelize.col('rating')), 'average']]
+              }).then((result) => {
+                // update the user's rating
+                if (result === null) {
+                  res.status(400).json({
+                    message: "Error while calculating rating",
+                  });
+                  return;
+                }
+                const avg = Math.round(result[0].dataValues.average);
+                JobApplicant.update({
+                  rating: avg,
+                },
+                  {
+                    where: {
+                      aid: data.applicantId,
+                    }
+                  }
+                )
+                  .then((applicant) => {
+                    if (applicant === null) {
+                      res.status(400).json({
+                        message:
+                          "Error while updating applicant's average rating",
+                      });
+                      return;
+                    }
+                    res.json({
+                      message: "Rating updated successfully",
+                    });
+                  })
+                  .catch((err) => {
+                    res.status(400).json(err);
+                  });
+              })
+                .catch((err) => {
+
+                  res.status(400).json(err);
+                });
+            })
+            .catch((err) => {
+              res.status(400).json(err);
+            });
+        }
+      })
+      .catch((err) => {
+        res.status(400).json(err);
+      });
+  } else {
+    // applicant can rate job
+    Rating.findOne({
+      where: {
+        senderId: user.uid,
+        receiverId: data.jobId,
+        category: "job",
+      }
+    })
+      .then((rating) => {
+    
+        if (rating === null) {
+          Applications.count({
+            where: {
+              aid: user.uid,
+              jid: data.jobId,
+              status: {
+                [Op.in]: ["accepted", "finished"],
+              },
+            }
+          })
+            .then((acceptedApplicant) => {
+              if (acceptedApplicant > 0) {
+                // add a new rating
+                ratingData = {
+                  category: "job",
+                  receiverId: data.jobId,
+                  senderId: user.uid,
+                  rating: data.rating,
+                }
+                Rating
+                  .create(ratingData)
+                  .then(() => {
+                    // get the average of ratings
+                    Rating.findAll({
+                      where:
+                        { receiverId: data.jobId, category: "job" },
+                      attributes: [[Sequelize.fn('avg', Sequelize.col('rating')), 'rating']]
+
+                    })
+                      .then((result) => {
+                        if (result === null) {
+                          res.status(400).json({
+                            message: "Error while calculating rating",
+                          });
+                          return;
+                        }
+                        const avg = result[0].dataValues.average;
+                        JOB.update({
+                          rating: avg,
+                        }, { where: { jid: data.jobId } }
+                        ).then((foundJob) => {
+                            if (foundJob === null) {
+                              res.status(400).json({
+                                message:
+                                  "Error while updating job's average rating",
+                              });
+                              return;
+                            }
+                            res.json({
+                              message: "Rating added successfully",
+                            });
+                          })
+                          .catch((err) => {
+                            res.status(400).json(err);
+                          });
+                      })
+                      .catch((err) => {
+                        res.status(400).json(err);
+                      });
+                  })
+                  .catch((err) => {
+                    res.status(400).json(err);
+                  });
+              } else {
+                // you cannot rate
+                res.status(400).json({
+                  message:
+                    "You haven't worked for this job. Hence you cannot give a rating.",
+                });
+              }
+            })
+            .catch((err) => {
+              res.status(400).json(err);
+            });
+        } else {
+          // update the rating
+          // rating.rating = data.rating;
+          Rating
+            .update({
+              rating:data.rating
+            },{
+              where:{receiverId:data.jobId,category:"job"}
+            }
+            )
+            .then(() => {
+              // get the average of ratings
+              Rating.findAll({
+                where:{receiverId:data.jobId,category:"job"},
+                attributes: [[Sequelize.fn('avg', Sequelize.col('rating')), 'average']]
+              
+              }).then((result) => {
+                  if (result === null) {
+                    res.status(400).json({
+                      message: "Error while calculating rating",
+                    });
+                    return;
+                  }
+                  const avg = result[0].dataValues.average;
+
+                  JOB.update({
+                    rating: avg,
+                  },
+                    {where:{jid: data.jobId,}
+                      
+                    }
+                  )
+                    .then((foundJob) => {
+                      if (foundJob === null) {
+                        res.status(400).json({
+                          message: "Error while updating job's average rating",
+                        });
+                        return;
+                      }
+                      res.json({
+                        message: "Rating added successfully",
+                      });
+                    })
+                    .catch((err) => {
+                      res.status(400).json(err);
+                    });
+                })
+                .catch((err) => {
+                  res.status(400).json(err);
+                });
+            })
+            .catch((err) => {
+              res.status(400).json(err);
+            });
+        }
+      })
+      .catch((err) => {
+        res.status(400).json(err);
+      });
+  }
+});
+
+// get personal rating
+router.get("/rating", jwtAuth, (req, res) => {
+  const user = req.user;
+  Rating.findOne({where:{
+    senderId: user.uid,
+    receiverId: req.query.id,
+    category: user.type === "recruiter" ? "applicant" : "job",
+  }}).then((rating) => {
+    if (rating === null) {
+      res.json({
+        rating: -1,
+      });
+      return;
+    }
+    res.json({
+      rating: rating.rating,
+    });
+  });
 });
 
 module.exports = router;

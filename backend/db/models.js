@@ -5,7 +5,7 @@ const Applications = require('./Applications')
 const Recruiter = require('./Recruiter')
 const sequelize = require('../db/Connection')
 const Sequelize = require("sequelize");
-const Rating = require('./Rating')
+const {Rating} = require('./Rating')
 const { DataTypes } = require("sequelize");
 
 JOB.belongsTo(Recruiter, {
