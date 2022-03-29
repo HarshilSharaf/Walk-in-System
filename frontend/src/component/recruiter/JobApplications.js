@@ -5,7 +5,6 @@ import {
   Grid,
   IconButton,
   InputAdornment,
-  makeStyles,
   Paper,
   TextField,
   Typography,
@@ -16,13 +15,14 @@ import {
   MenuItem,
   Checkbox,
   Avatar,
-} from "@material-ui/core";
+} from "@mui/material";
+import {makeStyles} from "@mui/styles";
 import { useParams } from "react-router-dom";
-import Rating from "@material-ui/lab/Rating";
 import axios from "axios";
-import FilterListIcon from "@material-ui/icons/FilterList";
-import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
-import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
+import { Rating } from "@mui/material";
+import FilterListIcon from "@mui/icons-material/FilterList";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
+import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 
 import { SetPopupContext } from "../../App";
 
@@ -364,7 +364,7 @@ const ApplicationTile = (props) => {
       application.Jobapplicant.resume &&
       application.Jobapplicant.resume !== ""
     ) {
-      const address = server+application.Jobapplicant.resume;
+      const address = server + application.Jobapplicant.resume;
       axios(address, {
         method: "GET",
         responseType: "blob",
@@ -693,12 +693,11 @@ const JobApplications = (props) => {
     });
     searchParams = [...searchParams, ...asc, ...desc];
     const queryString = searchParams.join("&");
-    console.log("QueryString:",queryString);
+    console.log("QueryString:", queryString);
     let address = `${apiList.applicants}?jobId=${jobId}`;
     if (queryString !== "") {
       address = `${address}&${queryString}`;
     }
-
 
     axios
       .get(address, {

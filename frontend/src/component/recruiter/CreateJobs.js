@@ -5,10 +5,10 @@ import {
   Typography,
   Modal,
   Paper,
-  makeStyles,
   TextField,
   MenuItem,
-} from "@material-ui/core";
+} from "@mui/material";
+import {makeStyles} from "@mui/styles";
 import axios from "axios";
 import ChipInput from "material-ui-chip-input";
 

@@ -4,12 +4,11 @@ import {
   TextField,
   Button,
   Typography,
-  makeStyles,
-  Paper,
-} from "@material-ui/core";
+  Paper
+} from "@mui/material"
 import axios from "axios";
 import { Redirect } from "react-router-dom";
-
+import {makeStyles} from "@mui/styles";
 import PasswordInput from "../lib/PasswordInput";
 import EmailInput from "../lib/EmailInput";
 import { SetPopupContext } from "../App";

@@ -4,16 +4,16 @@ import {
   TextField,
   Button,
   Typography,
-  makeStyles,
   Paper,
   MenuItem,
   Input,
-} from "@material-ui/core";
+} from "@mui/material";
+import {makeStyles} from "@mui/styles";
 import axios from "axios";
 import { Redirect } from "react-router-dom";
 import ChipInput from "material-ui-chip-input";
-import DescriptionIcon from "@material-ui/icons/Description";
-import FaceIcon from "@material-ui/icons/Face";
+import DescriptionIcon from "@mui/icons-material/Description";
+import FaceIcon from "@mui/icons-material/Face";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/material.css";
 

@@ -1,5 +1,5 @@
-import { Snackbar, Slide } from "@material-ui/core";
-import { Alert } from "@material-ui/lab";
+import { Snackbar } from "@mui/material";
+import { Alert } from "@mui/material";
 
 const MessagePopup = (props) => {
   const handleClose = (event, reason) => {

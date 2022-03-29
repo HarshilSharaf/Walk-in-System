@@ -5,14 +5,14 @@ import {
   Typography,
   Modal,
   Paper,
-  makeStyles,
   TextField,
-} from "@material-ui/core";
+} from "@mui/material";
+import { makeStyles } from "@mui/styles";
 import axios from "axios";
 import ChipInput from "material-ui-chip-input";
 import FileUploadInput from "../lib/FileUploadInput";
-import DescriptionIcon from "@material-ui/icons/Description";
-import FaceIcon from "@material-ui/icons/Face";
+import DescriptionIcon from "@mui/icons-material/Description";
+import FaceIcon from "@mui/icons-material/Face";
 
 import { SetPopupContext } from "../App";
 
@@ -174,7 +174,6 @@ const Profile = (props) => {
   };
 
   const handleUpdate = () => {
-
     let updatedDetails = {
       ...profileDetails,
       education: education

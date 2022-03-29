@@ -6,9 +6,9 @@ import {
   InputAdornment,
   IconButton,
   FormHelperText,
-} from "@material-ui/core";
-import Visibility from "@material-ui/icons/Visibility";
-import VisibilityOff from "@material-ui/icons/VisibilityOff";
+} from "@mui/material";
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
 const PasswordInput = (props) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -37,7 +37,7 @@ const PasswordInput = (props) => {
                 onMouseDown={handleMouseDownPassword}
                 edge="end"
               >
-                {showPassword ? <Visibility /> : <VisibilityOff />}
+                {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
               </IconButton>
             </InputAdornment>
           }
