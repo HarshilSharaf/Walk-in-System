@@ -16,7 +16,7 @@ import {
   Checkbox,
   Avatar,
 } from "@mui/material";
-import {makeStyles} from "@mui/styles";
+import { makeStyles } from "@mui/styles";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { Rating } from "@mui/material";
@@ -51,10 +51,6 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-  },
-  avatar: {
-    width: theme.spacing(17),
-    height: theme.spacing(17),
   },
 }));
 
@@ -553,7 +549,10 @@ const ApplicationTile = (props) => {
         >
           <Avatar
             src={`${server}${application.Jobapplicant.profile}`}
-            className={classes.avatar}
+            sx={{
+              width: { xs: "120px", md: "180px" },
+              height: { xs: "120px", md: "180px" },
+            }}
           />
         </Grid>
         <Grid container item xs={7} spacing={1} direction="column">

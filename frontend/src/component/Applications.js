@@ -17,7 +17,7 @@ import {
 } from "@mui/material";
 import { Rating } from "@mui/material";
 import axios from "axios";
-import {makeStyles} from "@mui/styles"
+import { makeStyles } from "@mui/styles";
 import { SetPopupContext } from "../App";
 
 import apiList from "../lib/apiList";
@@ -166,7 +166,7 @@ const ApplicationTile = (props) => {
                 color: "#ffffff",
               }}
             >
-              Application Status: {application.status}
+              {application.status}
             </Paper>
           </Grid>
           {application.status === "accepted" ||

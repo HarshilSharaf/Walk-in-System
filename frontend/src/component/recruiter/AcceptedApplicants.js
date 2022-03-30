@@ -16,19 +16,20 @@ import {
   Checkbox,
   Avatar,
 } from "@mui/material";
-import {makeStyles} from "@mui/styles";
+import { makeStyles } from "@mui/styles";
 import { useParams } from "react-router-dom";
+import { createTheme, ThemeProvider, styled } from "@mui/material/styles";
 import { Rating } from "@mui/material";
 import axios from "axios";
-import FilterListIcon from '@mui/icons-material/FilterList';
-import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
-import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import FilterListIcon from "@mui/icons-material/FilterList";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
+import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 
 import { SetPopupContext } from "../../App";
 
 import apiList, { server } from "../../lib/apiList";
-
-const useStyles = makeStyles((theme) => ({
+const theme = createTheme();
+const useStyles = makeStyles({
   body: {
     height: "inherit",
   },
@@ -52,11 +53,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     justifyContent: "center",
   },
-  avatar: {
-    width: theme.spacing(17),
-    height: theme.spacing(17),
-  },
-}));
+});
 
 const FilterPopup = (props) => {
   const classes = useStyles();
@@ -525,19 +522,23 @@ const ApplicationTile = (props) => {
       <Grid container>
         <Grid
           item
-          xs={2}
+          xs={3}
           style={{
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
+            objectFit: "contain",
           }}
         >
           <Avatar
             src={`${server}${application.Jobapplicant.profile}`}
-            className={classes.avatar}
+            sx={{
+              width: { xs: "120px", md: "180px" },
+              height: { xs: "120px", md: "180px" },
+            }}
           />
         </Grid>
-        <Grid container item xs={7} spacing={1} direction="column">
+        <Grid container item xs={6} spacing={1} direction="column">
           <Grid item>
             <Typography variant="h5">
               {application.Jobapplicant.name}
