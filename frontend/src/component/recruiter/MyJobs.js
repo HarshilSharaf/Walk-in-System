@@ -15,14 +15,14 @@ import {
   MenuItem,
   Checkbox,
 } from "@mui/material";
-import {makeStyles} from "@mui/styles";
+import { makeStyles } from "@mui/styles";
 import { useHistory } from "react-router-dom";
 import { Rating } from "@mui/material";
 import axios from "axios";
-import SearchIcon from '@mui/icons-material/Search';
-import FilterListIcon from '@mui/icons-material/FilterList';
-import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
-import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import SearchIcon from "@mui/icons-material/Search";
+import FilterListIcon from "@mui/icons-material/FilterList";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
+import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 
 import { SetPopupContext } from "../../App";
 
@@ -67,7 +67,6 @@ const JobTile = (props) => {
   const [open, setOpen] = useState(false);
   const [openUpdate, setOpenUpdate] = useState(false);
   const [jobDetails, setJobDetails] = useState(job);
-
 
   const handleInput = (key, value) => {
     setJobDetails({
@@ -227,7 +226,12 @@ const JobTile = (props) => {
           <Typography variant="h4" style={{ marginBottom: "10px" }}>
             Are you sure?
           </Typography>
-          <Grid container justify="center" spacing={5}>
+          <Grid
+            container
+            justify="center"
+            spacing={5}
+            style={{ justifyContent: "center", padding: "10px" }}
+          >
             <Grid item>
               <Button
                 variant="contained"
@@ -258,12 +262,12 @@ const JobTile = (props) => {
       >
         <Paper
           style={{
-            padding: "20px",
+            padding: "50px",
             outline: "none",
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
-            minWidth: "30%",
+            minWidth: "40%",
             alignItems: "center",
           }}
         >
@@ -318,7 +322,15 @@ const JobTile = (props) => {
               />
             </Grid>
           </Grid>
-          <Grid container justify="center" spacing={5}>
+          <Grid
+            container
+            justify="space-between"
+            style={{
+              justifyItems: "center",
+              justifyContent: "space-around",
+              margin: "20px 0px 0px 0px",
+            }}
+          >
             <Grid item>
               <Button
                 variant="contained"

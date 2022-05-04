@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
   },
   statusBlock: {
     width: "100%",
-    height: "100%",
+    height: "50px",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
@@ -36,10 +36,10 @@ const useStyles = makeStyles((theme) => ({
   },
   jobTileOuter: {
     padding: "30px",
-    margin: "20px 0",
+    margin: "20px 5%",
     boxSizing: "border-box",
     boxShadow: "none",
-    width: "100%",
+    width: "90%",
   },
   popupDialog: {
     height: "100%",

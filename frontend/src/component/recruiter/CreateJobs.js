@@ -8,7 +8,7 @@ import {
   TextField,
   MenuItem,
 } from "@mui/material";
-import {makeStyles} from "@mui/styles";
+import { makeStyles } from "@mui/styles";
 import axios from "axios";
 import ChipInput from "material-ui-chip-input";
 
@@ -96,7 +96,7 @@ const CreateJobs = (props) => {
         item
         direction="column"
         alignItems="center"
-        style={{ padding: "30px", minHeight: "93vh", width: "" }}
+        style={{ padding: "30px 10%", minHeight: "93vh", width: "" }}
       >
         <Grid item>
           <Typography variant="h2">Add Job</Typography>
